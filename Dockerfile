@@ -1,13 +1,5 @@
-FROM ubuntu:22.04
-
-RUN apt-get update
-RUN apt-get install -y apache2
-
-ENV APACHE_RUN_USER www-data
-ENV APACHE_RUN_GROUP www-data
-ENV APACHE_LOG_DIR /var/log/apache2
+FROM image-registry.openshift-image-registry.svc:5000/openshift/httpd:2.4-el8
 
 COPY index.html /var/www/html/
-
-ENTRYPOINT ["/usr/sbin/apache2"]
-CMD ["-D", "FOREGROUND"]
+ 
+ENTRYPOINT ["/usr/sbin/httpd","-D","FOREGROUND"]
