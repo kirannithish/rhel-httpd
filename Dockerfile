@@ -1,6 +1,13 @@
-#FROM rhel:latest
-FROM rhel8/httpd-24
-#RUN yum update -y
-#RUN yum install httpd -y
+FROM ubuntu:22.04
+
+RUN apt-get update
+RUN apt-get install -y apache2
+
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
+
 COPY index.html /var/www/html/
-ENTRYPOINT ["/usr/sbin/httpd","-D","FOREGROUND"]
+
+ENTRYPOINT ["/usr/sbin/apache2"]
+CMD ["-D", "FOREGROUND"]
