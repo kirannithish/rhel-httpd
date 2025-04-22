@@ -1,11 +1,17 @@
-# Use the official Apache HTTP Server image
-FROM httpd:2.4
+# Start with Red Hat UBI minimal
+FROM registry.access.redhat.com/ubi9/ubi-minimal
 
-# Copy custom HTML file into the Apache document root
-COPY index.html /usr/local/apache2/htdocs/
+# Install httpd
+RUN microdnf install -y httpd && microdnf clean all
 
-# Expose port 80
+# Add custom index.html to web root
+COPY index.html /var/www/html/index.html
+
+# Set the working user to non-root (OpenShift will override this anyway)
+USER 1001
+
+# Expose port 8080 (default for OpenShift)
 EXPOSE 8080
 
-# Start Apache in the foreground
-CMD ["httpd-foreground"]
+# Run Apache in foreground with the correct config
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
