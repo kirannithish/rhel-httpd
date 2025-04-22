@@ -1,5 +1,11 @@
-FROM image-registry.openshift-image-registry.svc:5000/openshift/httpd:2.4-el8
+# Use the official Apache HTTP Server image
+FROM httpd:2.4
 
-COPY index.html /var/www/html/
- 
-ENTRYPOINT ["/usr/sbin/httpd","-D","FOREGROUND"]
+# Copy custom HTML file into the Apache document root
+COPY index.html /usr/local/apache2/htdocs/
+
+# Expose port 80
+EXPOSE 8080
+
+# Start Apache in the foreground
+CMD ["httpd-foreground"]
